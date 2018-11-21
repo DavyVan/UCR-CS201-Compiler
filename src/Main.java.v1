@@ -124,89 +124,75 @@ public class Main {
 	private static void dynamicAnalysis(){
 		PackManager.v().getPack("jtp").add(new Transform("jtp.myInstrumenter", new BodyTransformer() {
 
-			private void profile(Body arg0, String arg1, Map arg2) {
+			@Override
+			protected void internalTransform(Body arg0, String arg1, Map arg2) {
+				//Dynamic Analysis (Instrumentation) code
 				SootClass currentSootClass = arg0.getMethod().getDeclaringClass();
 				ClassicCompleteBlockGraph blockGraph = new ClassicCompleteBlockGraph(arg0);
 				List<Block> blocks = blockGraph.getBlocks();
 				int blockNum = blocks.size();
-				String currentMethodName = arg0.getMethod().getName();
+				SootField blockExeNumArrayField = null;
+				SootField blockExeOrderMatrixField = null;
 				
-				/**
-				 * BB Profiling
-				 * Declare integer field for each block in each function with field name "[funcName]BB[block index]ExeNum"
-				 */
-				SootField blockExeNumField = null;
-				
-				// Prepare
+				// Add Fields
+				blockExeNumArrayField = new SootField("blockExeNumArray"+arg0.getMethod().getName(), ArrayType.v(IntType.v(), blockNum), Modifier.STATIC);
+				blockExeOrderMatrixField = new SootField("blockExeOrderMatrix"+arg0.getMethod().getName(), ArrayType.v(IntType.v(), blockNum * blockNum), Modifier.STATIC);
+				currentSootClass.addField(blockExeNumArrayField);
+				currentSootClass.addField(blockExeOrderMatrixField);
 				// Add tmpLocal
 				Local tmpLocal = Jimple.v().newLocal("tmpLocal", IntType.v());
 				arg0.getLocals().add(tmpLocal);
-				// If this is the main function
-				boolean isMainMethod = arg0.getMethod().getSubSignature().equals("void main(java.lang.String[])");
-				// Print
-				Local tmpRef = Jimple.v().newLocal("tmpRef", RefType.v("java.io.PrintStream"));
-		        arg0.getLocals().add(tmpRef);
-		        SootMethod printIntCall = Scene.v().getSootClass("java.io.PrintStream").getMethod("void println(int)");
-		        SootMethod printStringCall = Scene.v().getSootClass("java.io.PrintStream").getMethod("void print(java.lang.String)");
 				
-				for (Block b : blocks) {	// For each block
-					// Add Fields
-					blockExeNumField = new SootField(currentMethodName + "BB" + b.getIndexInMethod() + "ExeNum", IntType.v(), Modifier.STATIC);
-					currentSootClass.addField(blockExeNumField);
-					
-					// Increment instructions
+				// Add code to increase the Fields
+				boolean isMainMethod = arg0.getMethod().getSubSignature().equals("void main(java.lang.String[])");
+				for (Block b : blocks) {
 					Unit headUnit = b.getHead();
 					Unit tailUnit = b.getTail();
+					
+					// insert profiling instructions to headUnit
 					// Construct Jimple stmt
-					// (1): tmpLocal = SootField
-					AssignStmt blockExeNumStmt1 = Jimple.v().newAssignStmt(tmpLocal, Jimple.v().newStaticFieldRef(blockExeNumField.makeRef()));
+					// (1): tmpLocal = blockExeNumArray[b's index]
+					AssignStmt blockExeNumStmt1 = Jimple.v().newAssignStmt(tmpLocal, Jimple.v().newArrayRef(Jimple.v().newStaticFieldRef(blockExeNumArrayField.makeRef()), IntConstant.v(b.getIndexInMethod())));
 					// (2): tmpLocal = tmpLocal + 1
-					AssignStmt blockExeNumStmt2 = Jimple.v().newAssignStmt(tmpLocal, Jimple.v().newAddExpr(tmpLocal, IntConstant.v(1)));
-					// (3): SootField = tmpLocal
-					AssignStmt blockExeNumStmt3 = Jimple.v().newAssignStmt(Jimple.v().newStaticFieldRef(blockExeNumField.makeRef()), tmpLocal);
+					AssignStmt blockExeNumStmt2 = Jimple.v().newAssignStmt(tmpLocal, IntConstant.v(1));
+					// (3): blockExeNumArray[b's index] = tmpLocal
+					AssignStmt blockExeNumStmt3 = Jimple.v().newAssignStmt(Jimple.v().newArrayRef(Jimple.v().newStaticFieldRef(blockExeNumArrayField.makeRef()), IntConstant.v(b.getIndexInMethod())), tmpLocal);
 					// Do insert
 					b.insertBefore(blockExeNumStmt1, headUnit);
 					b.insertBefore(blockExeNumStmt2, headUnit);
 					b.insertBefore(blockExeNumStmt3, headUnit);
 					
-					// insert output instructions before main returns
-					if (isMainMethod && tailUnit instanceof ReturnVoidStmt) {	// Only run once
-						// Insert "tmpRef = java.lang.System.out;"
-				        b.insertBefore(Jimple.v().newAssignStmt(tmpRef, Jimple.v().newStaticFieldRef(Scene.v().getField("<java.lang.System: java.io.PrintStream out>").makeRef())), tailUnit);
+					// insert calculating and output instructions before main returns
+					if (isMainMethod && tailUnit instanceof ReturnVoidStmt) {
+						Local tmpRef = Jimple.v().newLocal("tmpRef", RefType.v("java.io.PrintStream"));
+				        arg0.getLocals().add(tmpRef);
+				        // Insert "tmpRef = java.lang.System.out;"
+				        b.insertBefore(Jimple.v().newAssignStmt(tmpRef, Jimple.v().newStaticFieldRef(Scene.v().getField(",java.lang.System: java.io.PrintStream out>").makeRef())), tailUnit);
+				        SootMethod printIntCall = Scene.v().getSootClass("java.io.PrintStream").getMethod("void println(int)");
+				        SootMethod printStringCall = Scene.v().getSootClass("java.io.PrintStream").getMethod("void print(java.lang.String)");
 				        
-				        List<SootMethod> methods = currentSootClass.getMethods();
-				        for (SootMethod m : methods) {
-//				        	System.out.println("Method: " + m.toString());
-				        	b.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("Method: " + m.toString()))), tailUnit);
-				        	
-				        	List<Block> mBlocks = new ClassicCompleteBlockGraph(m.retrieveActiveBody()).getBlocks();
-				        	for (Block mb : mBlocks) {
-				        		b.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("BB" + mb.getIndexInMethod() + ": "))), tailUnit);
-				        		SootField mbf = currentSootClass.getFieldByName(m.getName() + "BB" + mb.getIndexInMethod() + "ExeNum");
-				        		b.insertBefore(Jimple.v().newAssignStmt(tmpLocal, Jimple.v().newStaticFieldRef(mbf.makeRef())), tailUnit);
-				        		b.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printIntCall.makeRef(), tmpLocal)), tailUnit);
-				        	}
-				        }
+						/**
+						 * BB Profiling - Output
+						 */
+						List<SootMethod> methods = currentSootClass.getMethods();
+						for (SootMethod m : methods) {
+							System.out.println("Method: " + m.toString());
+							
+							SootField mBlockExeNumArrayField = currentSootClass.getFieldByName("blockExeNumArray"+m.getName());
+							List<Block> mBlocks = new ClassicCompleteBlockGraph(m.retrieveActiveBody()).getBlocks();
+							
+							Local temString = Jimple.v().newLocal("tmpString", RefType.v("java.lang.String"));
+							arg0.getLocals().add(temString);
+							for (Block mb : mBlocks) {
+								b.insertBefore(Jimple.v().newAssignStmt(temString, StringConstant.v("BB"+mb.getIndexInMethod()+": ")), tailUnit);
+								b.insertBefore(Jimple.v().newAssignStmt(tmpLocal, Jimple.v().newArrayRef(Jimple.v().newStaticFieldRef(mBlockExeNumArrayField.makeRef()), IntConstant.v(mb.getIndexInMethod()))), tailUnit);
+								b.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), temString)), tailUnit);
+								b.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printIntCall.makeRef(), tmpLocal)), tailUnit);
+							}
+						}
 					}
 				}
-//				arg0.validate();
-			}
-			
-			@Override
-			protected void internalTransform(Body arg0, String arg1, Map arg2) {
-				//Dynamic Analysis (Instrumentation) code
-				boolean isMainMethod = arg0.getMethod().getSubSignature().equals("void main(java.lang.String[])");
-				if (isMainMethod) {
-					// for each method in this class
-					List<SootMethod> methods = arg0.getMethod().getDeclaringClass().getMethods();
-					for (SootMethod m : methods) {
-						boolean _isMainMethod = m.getSubSignature().equals("void main(java.lang.String[])");
-						if (_isMainMethod)
-							continue;
-						this.profile(m.retrieveActiveBody(), arg1, arg2);
-					}
-					profile(arg0, arg1, arg2);
-				}	// else do nothing
+				arg0.validate();
 			}			
 	   }));
 	}

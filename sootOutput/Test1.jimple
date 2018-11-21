@@ -1,9 +1,27 @@
 public class Test1 extends java.lang.Object
 {
+    static int func1BB0ExeNum;
+    static int func1BB1ExeNum;
+    static int func1BB2ExeNum;
+    static int func1BB3ExeNum;
+    static int func1BB4ExeNum;
+    static int func1BB5ExeNum;
+    static int func1BB6ExeNum;
+    static int func1BB7ExeNum;
+    static int <init>BB0ExeNum;
+    static int mainBB0ExeNum;
 
     public static void main(java.lang.String[])
     {
         java.lang.String[] args;
+        int tmpLocal;
+        java.io.PrintStream tmpRef;
+
+        tmpLocal = <Test1: int mainBB0ExeNum>;
+
+        tmpLocal = tmpLocal + 1;
+
+        <Test1: int mainBB0ExeNum> = tmpLocal;
 
         args := @parameter0: java.lang.String[];
 
@@ -11,40 +29,165 @@ public class Test1 extends java.lang.Object
 
         staticinvoke <Test1: void func1(int)>(95);
 
+        tmpRef = <java.lang.System: java.io.PrintStream out>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("Method: <Test1: void main(java.lang.String[])>");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB0: ");
+
+        tmpLocal = <Test1: int mainBB0ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("Method: <Test1: void func1(int)>");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB0: ");
+
+        tmpLocal = <Test1: int func1BB0ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB1: ");
+
+        tmpLocal = <Test1: int func1BB1ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB2: ");
+
+        tmpLocal = <Test1: int func1BB2ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB3: ");
+
+        tmpLocal = <Test1: int func1BB3ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB4: ");
+
+        tmpLocal = <Test1: int func1BB4ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB5: ");
+
+        tmpLocal = <Test1: int func1BB5ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB6: ");
+
+        tmpLocal = <Test1: int func1BB6ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB7: ");
+
+        tmpLocal = <Test1: int func1BB7ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("Method: <Test1: void <init>()>");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB0: ");
+
+        tmpLocal = <Test1: int <init>BB0ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
         return;
     }
 
     public static void func1(int)
     {
-        int x, temp$0, temp$1;
+        int x, temp$0, temp$1, tmpLocal;
+
+        tmpLocal = <Test1: int func1BB0ExeNum>;
+
+        tmpLocal = tmpLocal + 1;
+
+        <Test1: int func1BB0ExeNum> = tmpLocal;
 
         x := @parameter0: int;
 
         if x != 0 goto label1;
 
-        goto label3;
+        tmpLocal = <Test1: int func1BB1ExeNum>;
+
+        tmpLocal = tmpLocal + 1;
+
+        <Test1: int func1BB1ExeNum> = tmpLocal;
+
+        goto label5;
 
      label1:
-        temp$0 = x % 4;
+        tmpLocal = <Test1: int func1BB2ExeNum>;
 
-        if temp$0 != 0 goto label2;
+        tmpLocal = tmpLocal + 1;
 
-        goto label3;
+        <Test1: int func1BB2ExeNum> = tmpLocal;
 
      label2:
+        tmpLocal = <Test1: int func1BB3ExeNum>;
+
+        tmpLocal = tmpLocal + 1;
+
+        <Test1: int func1BB3ExeNum> = tmpLocal;
+
+        temp$0 = x % 4;
+
+        if temp$0 != 0 goto label3;
+
+        tmpLocal = <Test1: int func1BB4ExeNum>;
+
+        tmpLocal = tmpLocal + 1;
+
+        <Test1: int func1BB4ExeNum> = tmpLocal;
+
+        goto label4;
+
+     label3:
+        tmpLocal = <Test1: int func1BB5ExeNum>;
+
+        tmpLocal = tmpLocal + 1;
+
+        <Test1: int func1BB5ExeNum> = tmpLocal;
+
         temp$1 = x / 4;
 
         x = temp$1;
 
-        goto label1;
+        goto label2;
 
-     label3:
+     label4:
+        tmpLocal = <Test1: int func1BB6ExeNum>;
+
+        tmpLocal = tmpLocal + 1;
+
+        <Test1: int func1BB6ExeNum> = tmpLocal;
+
+     label5:
+        tmpLocal = <Test1: int func1BB7ExeNum>;
+
+        tmpLocal = tmpLocal + 1;
+
+        <Test1: int func1BB7ExeNum> = tmpLocal;
+
         return;
     }
 
     public void <init>()
     {
         Test1 this;
+        int tmpLocal;
+
+        tmpLocal = <Test1: int <init>BB0ExeNum>;
+
+        tmpLocal = tmpLocal + 1;
+
+        <Test1: int <init>BB0ExeNum> = tmpLocal;
 
         this := @this: Test1;
 
