@@ -2,7 +2,7 @@ import java.util.Map;
 import java.util.List;
 
 import soot.ArrayType;
-import soot.IntType;
+import soot.LongType;
 import soot.Local;
 import soot.Modifier;
 import soot.RefType;
@@ -16,7 +16,7 @@ import soot.SootClass;
 import soot.SootMethod;
 import soot.Transform;
 import soot.jimple.AssignStmt;
-import soot.jimple.IntConstant;
+import soot.jimple.LongConstant;
 import soot.jimple.Jimple;
 import soot.jimple.ReturnVoidStmt;
 import soot.jimple.StringConstant;
@@ -139,7 +139,7 @@ public class Main {
 				
 				// Prepare
 				// Add tmpLocal
-				Local tmpLocal = Jimple.v().newLocal("tmpLocal", IntType.v());
+				Local tmpLocal = Jimple.v().newLocal("tmpLocal", LongType.v());
 				arg0.getLocals().add(tmpLocal);
 				// If this is the main function
 				boolean isMainMethod = arg0.getMethod().getSubSignature().equals("void main(java.lang.String[])");
@@ -151,7 +151,7 @@ public class Main {
 				
 				for (Block b : blocks) {	// For each block
 					// Add Fields
-					blockExeNumField = new SootField(currentMethodName + "BB" + b.getIndexInMethod() + "ExeNum", IntType.v(), Modifier.STATIC);
+					blockExeNumField = new SootField(currentMethodName + "BB" + b.getIndexInMethod() + "ExeNum", LongType.v(), Modifier.STATIC);
 					currentSootClass.addField(blockExeNumField);
 					
 					// Increment instructions
@@ -161,7 +161,7 @@ public class Main {
 					// (1): tmpLocal = SootField
 					AssignStmt blockExeNumStmt1 = Jimple.v().newAssignStmt(tmpLocal, Jimple.v().newStaticFieldRef(blockExeNumField.makeRef()));
 					// (2): tmpLocal = tmpLocal + 1
-					AssignStmt blockExeNumStmt2 = Jimple.v().newAssignStmt(tmpLocal, Jimple.v().newAddExpr(tmpLocal, IntConstant.v(1)));
+					AssignStmt blockExeNumStmt2 = Jimple.v().newAssignStmt(tmpLocal, Jimple.v().newAddExpr(tmpLocal, LongConstant.v(1)));
 					// (3): SootField = tmpLocal
 					AssignStmt blockExeNumStmt3 = Jimple.v().newAssignStmt(Jimple.v().newStaticFieldRef(blockExeNumField.makeRef()), tmpLocal);
 					// Do insert
@@ -176,8 +176,10 @@ public class Main {
 				        
 				        List<SootMethod> methods = currentSootClass.getMethods();
 				        for (SootMethod m : methods) {
+				        	if (m.getName().equalsIgnoreCase("<init>"))
+				        		continue;
 //				        	System.out.println("Method: " + m.toString());
-				        	b.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("Method: " + m.toString()))), tailUnit);
+				        	b.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("Method: " + m.toString() + "\n"))), tailUnit);
 				        	
 				        	List<Block> mBlocks = new ClassicCompleteBlockGraph(m.retrieveActiveBody()).getBlocks();
 				        	for (Block mb : mBlocks) {
@@ -203,6 +205,8 @@ public class Main {
 						boolean _isMainMethod = m.getSubSignature().equals("void main(java.lang.String[])");
 						if (_isMainMethod)
 							continue;
+						if (m.getName().equalsIgnoreCase("<init>"))
+							continue;
 						this.profile(m.retrieveActiveBody(), arg1, arg2);
 					}
 					profile(arg0, arg1, arg2);
@@ -219,6 +223,7 @@ public class Main {
         Options.v().set_soot_classpath(classpath);
         Options.v().set_prepend_classpath(true);
         Options.v().setPhaseOption("cg.spark", "on");        
+        Options.v().set_validate(false);
     }
 }
 
