@@ -15,7 +15,9 @@ import soot.Scene;
 import soot.SootClass;
 import soot.SootMethod;
 import soot.Transform;
+import soot.Value;
 import soot.jimple.AssignStmt;
+import soot.jimple.IntConstant;
 import soot.jimple.LongConstant;
 import soot.jimple.Jimple;
 import soot.jimple.ReturnVoidStmt;
@@ -131,24 +133,34 @@ public class Main {
 				int blockNum = blocks.size();
 				String currentMethodName = arg0.getMethod().getName();
 				
-				/**
-				 * BB Profiling
-				 * Declare integer field for each block in each function with field name "[funcName]BB[block index]ExeNum"
-				 */
 				SootField blockExeNumField = null;
+				SootField edgeExeNumField = null;
 				
 				// Prepare
 				// Add tmpLocal
 				Local tmpLocal = Jimple.v().newLocal("tmpLocal", LongType.v());
 				arg0.getLocals().add(tmpLocal);
+				Local ttmpLocal = Jimple.v().newLocal("ttmpLocal", LongType.v());
+				arg0.getLocals().add(ttmpLocal);
+				Local tmpArrayRef = Jimple.v().newLocal("tmpArrayRef", ArrayType.v(LongType.v(), 1));
+				arg0.getLocals().add(tmpArrayRef);
+				Local tmpString = Jimple.v().newLocal("tmpString", RefType.v("java.lang.String"));
+				arg0.getLocals().add(tmpString);
+				
 				// If this is the main function
 				boolean isMainMethod = arg0.getMethod().getSubSignature().equals("void main(java.lang.String[])");
-				// Print
+				
+				// Load Print Stream
 				Local tmpRef = Jimple.v().newLocal("tmpRef", RefType.v("java.io.PrintStream"));
 		        arg0.getLocals().add(tmpRef);
 		        SootMethod printIntCall = Scene.v().getSootClass("java.io.PrintStream").getMethod("void println(int)");
+		        SootMethod printIntNoNewLineCall = Scene.v().getSootClass("java.io.PrintStream").getMethod("void print(int)");
 		        SootMethod printStringCall = Scene.v().getSootClass("java.io.PrintStream").getMethod("void print(java.lang.String)");
 				
+		        /**
+				 * BB Profiling
+				 * Declare a field for each block in each function with field name "[funcName]BB[block index]ExeNum"
+				 */
 				for (Block b : blocks) {	// For each block
 					// Add Fields
 					blockExeNumField = new SootField(currentMethodName + "BB" + b.getIndexInMethod() + "ExeNum", LongType.v(), Modifier.STATIC);
@@ -157,7 +169,6 @@ public class Main {
 					// Increment instructions
 					Unit headUnit = b.getHead();
 					Unit tailUnit = b.getTail();
-					// Construct Jimple stmt
 					// (1): tmpLocal = SootField
 					AssignStmt blockExeNumStmt1 = Jimple.v().newAssignStmt(tmpLocal, Jimple.v().newStaticFieldRef(blockExeNumField.makeRef()));
 					// (2): tmpLocal = tmpLocal + 1
@@ -174,11 +185,14 @@ public class Main {
 						// Insert "tmpRef = java.lang.System.out;"
 				        b.insertBefore(Jimple.v().newAssignStmt(tmpRef, Jimple.v().newStaticFieldRef(Scene.v().getField("<java.lang.System: java.io.PrintStream out>").makeRef())), tailUnit);
 				        
+				        b.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("\n"))), tailUnit);
+						b.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("+----------------------------------\n"))), tailUnit);
+						b.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("| Basic Block Profiling\n"))), tailUnit);
+						b.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("+----------------------------------\n"))), tailUnit);
 				        List<SootMethod> methods = currentSootClass.getMethods();
 				        for (SootMethod m : methods) {
 				        	if (m.getName().equalsIgnoreCase("<init>"))
 				        		continue;
-//				        	System.out.println("Method: " + m.toString());
 				        	b.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("Method: " + m.toString() + "\n"))), tailUnit);
 				        	
 				        	List<Block> mBlocks = new ClassicCompleteBlockGraph(m.retrieveActiveBody()).getBlocks();
@@ -191,6 +205,101 @@ public class Main {
 				        }
 					}
 				}
+				
+				/**
+				 * Edge Profiling
+				 * Declare a field for each edge with name "[funcName]BB[index1]toBB[index2]"
+				 * Only profile functions that contain 2 or more blocks
+				 */
+				if (blockNum >= 2) {
+					// Add Field
+					SootField lastBlockField = new SootField(currentMethodName + "LastBlock", LongType.v(), Modifier.STATIC);
+					currentSootClass.addField(lastBlockField);
+					// Add Matrix Field
+					edgeExeNumField = new SootField(currentMethodName + "EdgeExeNumMatrix", ArrayType.v(LongType.v(), 1), Modifier.STATIC);
+					currentSootClass.addField(edgeExeNumField);
+					
+					// Increment Instructions
+					for (Block b : blocks) {
+						Unit headUnit = b.getHead();
+						Unit tailUnit = b.getTail();
+						int index = b.getIndexInMethod();
+						if (index != 0) {	// skip head block
+							// ...EdgeExeNumMatrix[lastBlock][index]++;
+							//				|
+							//				V
+							// ...EdgeExeNumMatrix[lastBlock * blockNum + index]++;
+							// (1) tmpLocal = lastBlock
+							b.insertBefore(Jimple.v().newAssignStmt(tmpLocal, Jimple.v().newStaticFieldRef(lastBlockField.makeRef())), tailUnit);
+							// (2) tmpLocal = tmpLocal * blockNum
+							b.insertBefore(Jimple.v().newAssignStmt(tmpLocal, Jimple.v().newMulExpr(tmpLocal, LongConstant.v(blockNum))), tailUnit);
+							// (3) tmpLocal = tmpLocal + index
+							b.insertBefore(Jimple.v().newAssignStmt(tmpLocal, Jimple.v().newAddExpr(tmpLocal, LongConstant.v(index))), tailUnit);
+							// (4) tmpArrayRef = Matrix
+							b.insertBefore(Jimple.v().newAssignStmt(tmpArrayRef, Jimple.v().newStaticFieldRef(edgeExeNumField.makeRef())), tailUnit);
+							// (5) ttmpLoacl = Matrix[tmpLocal]
+							b.insertBefore(Jimple.v().newAssignStmt(ttmpLocal, Jimple.v().newArrayRef(tmpArrayRef, tmpLocal)), tailUnit);
+							// (6) ttmpLocal = ttmpLocal + 1
+							b.insertBefore(Jimple.v().newAssignStmt(ttmpLocal, Jimple.v().newAddExpr(ttmpLocal, LongConstant.v(1))), tailUnit);
+							// (7) Matrix[tmpLocal] = ttmpLocal
+							b.insertBefore(Jimple.v().newAssignStmt(Jimple.v().newArrayRef(tmpArrayRef, tmpLocal), ttmpLocal), tailUnit);
+						}
+						
+						// update lastBlock
+						// lastBlock = index
+						b.insertBefore(Jimple.v().newAssignStmt(Jimple.v().newStaticFieldRef(lastBlockField.makeRef()), LongConstant.v(index)), tailUnit);
+					}
+				}
+
+				if (isMainMethod) {		// Something to be done in main function
+					// Allocate matrixes for every method
+					Block headBlock = blocks.get(0);	// Insert to the beginning of main
+					List<SootMethod> methods = currentSootClass.getMethods();
+					for (SootMethod m : methods) {
+						int _blockNum = new ClassicCompleteBlockGraph(m.retrieveActiveBody()).getBlocks().size();
+						if (_blockNum >= 2) {
+							Unit _u = headBlock.getHead();
+							headBlock.insertBefore(Jimple.v().newAssignStmt(tmpArrayRef, Jimple.v().newNewArrayExpr(LongType.v(), IntConstant.v(_blockNum * _blockNum))), _u);
+							headBlock.insertBefore(Jimple.v().newAssignStmt(Jimple.v().newStaticFieldRef(currentSootClass.getFieldByName(m.getName() + "EdgeExeNumMatrix").makeRef()), tmpArrayRef), _u);
+						}
+					}
+					
+					// Output
+					Block tailBlock = blockGraph.getTails().get(0);		// We only have one exit in main function for this project
+					Unit tailUnit = tailBlock.getTail();				// Insert to the end of main
+					tailBlock.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("\n"))), tailUnit);
+					tailBlock.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("+----------------------------------\n"))), tailUnit);
+					tailBlock.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("| Edge Profiling\n"))), tailUnit);
+					tailBlock.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("+----------------------------------\n"))), tailUnit);
+					for (SootMethod m : methods) {
+						ClassicCompleteBlockGraph mBlockGraph = new ClassicCompleteBlockGraph(m.retrieveActiveBody());
+						List<Block> mBlocks = mBlockGraph.getBlocks();
+						int _blockNum = mBlocks.size();
+						if (_blockNum >= 2) {
+							// Print "Method: <...>"
+							tailBlock.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("Method: " + m.toString() + "\n"))), tailUnit);
+							
+							SootField _edgeExeNumField = currentSootClass.getFieldByName(m.getName() + "EdgeExeNumMatrix");
+							// (0.1) tmpArrayRef = Matrix
+							tailBlock.insertBefore(Jimple.v().newAssignStmt(tmpArrayRef, Jimple.v().newStaticFieldRef(_edgeExeNumField.makeRef())), tailUnit);
+							for (Block mb : mBlocks) {
+								int predIndex = mb.getIndexInMethod();
+								List<Block> mbSuccs = mb.getSuccs();
+								for (Block mbs : mbSuccs) {
+									// (1) print "BB[predIndex] -> BB[mbs.index]:  "
+									tailBlock.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("BB" + predIndex + " -> BB" + mbs.getIndexInMethod() + ":  "))), tailUnit);
+									// (2) tmpLocal = tmpArrayRef[X] (X = predIndex * _blockNum + mbs.index]
+									tailBlock.insertBefore(Jimple.v().newAssignStmt(tmpLocal, Jimple.v().newArrayRef(tmpArrayRef, LongConstant.v(predIndex * _blockNum + mbs.getIndexInMethod()))), tailUnit);
+									// (3) Print tmpLocal
+									tailBlock.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printIntCall.makeRef(), tmpLocal)), tailUnit);
+								}
+							}
+						}
+						
+					}
+				}
+				
+				
 //				arg0.validate();
 			}
 			
@@ -223,7 +332,6 @@ public class Main {
         Options.v().set_soot_classpath(classpath);
         Options.v().set_prepend_classpath(true);
         Options.v().setPhaseOption("cg.spark", "on");        
-        Options.v().set_validate(false);
     }
 }
 
