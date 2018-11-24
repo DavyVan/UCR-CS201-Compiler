@@ -15,9 +15,9 @@ public class Test1 extends java.lang.Object
     public static void main(java.lang.String[])
     {
         java.lang.String[] args;
-        long tmpLocal, ttmpLocal;
+        long tmpLocal, ttmpLocal, tttmpLocal;
         long[] tmpArrayRef;
-        java.lang.String tmpString;
+        float tmpFloat;
         java.io.PrintStream tmpRef;
 
         tmpArrayRef = newarray (long)[64];
@@ -169,6 +169,180 @@ public class Test1 extends java.lang.Object
         tmpLocal = tmpArrayRef[55L];
 
         virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("+----------------------------------\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("| Average Number Of Variables Live\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("| At An Executed Instruction\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("+----------------------------------\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("Method: <Test1: void main(java.lang.String[])>\n");
+
+        tmpFloat = 0.0F;
+
+        tttmpLocal = 0L;
+
+        tmpLocal = <Test1: long mainBB0ExeNum>;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 2L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpFloat = tmpFloat / tttmpLocal;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(float)>(tmpFloat);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("Method: <Test1: void func1(int)>\n");
+
+        tmpFloat = 0.0F;
+
+        tttmpLocal = 0L;
+
+        tmpLocal = <Test1: long func1BB0ExeNum>;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpLocal = <Test1: long func1BB1ExeNum>;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpLocal = <Test1: long func1BB2ExeNum>;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpLocal = <Test1: long func1BB3ExeNum>;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 2L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpLocal = <Test1: long func1BB4ExeNum>;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpLocal = <Test1: long func1BB5ExeNum>;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpLocal = <Test1: long func1BB6ExeNum>;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpLocal = <Test1: long func1BB7ExeNum>;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpFloat = tmpFloat / tttmpLocal;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(float)>(tmpFloat);
 
         return;
     }

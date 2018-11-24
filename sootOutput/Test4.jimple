@@ -1,0 +1,290 @@
+public class Test4 extends java.lang.Object
+{
+    static long mainBB0ExeNum;
+    static long mainBB1ExeNum;
+    static long mainBB2ExeNum;
+    static long mainBB3ExeNum;
+    static long mainLastBlock;
+    static long[] mainEdgeExeNumMatrix;
+
+    public static void main(java.lang.String[])
+    {
+        java.lang.String[] args;
+        int x, temp$1;
+        long tmpLocal, ttmpLocal, tttmpLocal;
+        long[] tmpArrayRef;
+        float tmpFloat;
+        java.io.PrintStream tmpRef;
+
+        tmpArrayRef = newarray (long)[16];
+
+        <Test4: long[] mainEdgeExeNumMatrix> = tmpArrayRef;
+
+        tmpLocal = <Test4: long mainBB0ExeNum>;
+
+        tmpLocal = tmpLocal + 1L;
+
+        <Test4: long mainBB0ExeNum> = tmpLocal;
+
+        args := @parameter0: java.lang.String[];
+
+        <Test4: long mainLastBlock> = 0L;
+
+        x = 10;
+
+     label1:
+        tmpLocal = <Test4: long mainBB1ExeNum>;
+
+        tmpLocal = tmpLocal + 1L;
+
+        <Test4: long mainBB1ExeNum> = tmpLocal;
+
+        temp$1 = x + 1;
+
+        x = temp$1;
+
+        tmpLocal = <Test4: long mainLastBlock>;
+
+        tmpLocal = tmpLocal * 4L;
+
+        tmpLocal = tmpLocal + 1L;
+
+        tmpArrayRef = <Test4: long[] mainEdgeExeNumMatrix>;
+
+        ttmpLocal = tmpArrayRef[tmpLocal];
+
+        ttmpLocal = ttmpLocal + 1L;
+
+        tmpArrayRef[tmpLocal] = ttmpLocal;
+
+        <Test4: long mainLastBlock> = 1L;
+
+        if temp$1 < 40 goto label1;
+
+        tmpLocal = <Test4: long mainBB2ExeNum>;
+
+        tmpLocal = tmpLocal + 1L;
+
+        <Test4: long mainBB2ExeNum> = tmpLocal;
+
+        tmpLocal = <Test4: long mainLastBlock>;
+
+        tmpLocal = tmpLocal * 4L;
+
+        tmpLocal = tmpLocal + 2L;
+
+        tmpArrayRef = <Test4: long[] mainEdgeExeNumMatrix>;
+
+        ttmpLocal = tmpArrayRef[tmpLocal];
+
+        ttmpLocal = ttmpLocal + 1L;
+
+        tmpArrayRef[tmpLocal] = ttmpLocal;
+
+        <Test4: long mainLastBlock> = 2L;
+
+        goto label2;
+
+     label2:
+        tmpLocal = <Test4: long mainBB3ExeNum>;
+
+        tmpLocal = tmpLocal + 1L;
+
+        <Test4: long mainBB3ExeNum> = tmpLocal;
+
+        tmpRef = <java.lang.System: java.io.PrintStream out>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("+----------------------------------\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("| Basic Block Profiling\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("+----------------------------------\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("Method: <Test4: void main(java.lang.String[])>\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB0: ");
+
+        tmpLocal = <Test4: long mainBB0ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB1: ");
+
+        tmpLocal = <Test4: long mainBB1ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB2: ");
+
+        tmpLocal = <Test4: long mainBB2ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB3: ");
+
+        tmpLocal = <Test4: long mainBB3ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        tmpLocal = <Test4: long mainLastBlock>;
+
+        tmpLocal = tmpLocal * 4L;
+
+        tmpLocal = tmpLocal + 3L;
+
+        tmpArrayRef = <Test4: long[] mainEdgeExeNumMatrix>;
+
+        ttmpLocal = tmpArrayRef[tmpLocal];
+
+        ttmpLocal = ttmpLocal + 1L;
+
+        tmpArrayRef[tmpLocal] = ttmpLocal;
+
+        <Test4: long mainLastBlock> = 3L;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("+----------------------------------\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("| Edge Profiling\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("+----------------------------------\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("Method: <Test4: void main(java.lang.String[])>\n");
+
+        tmpArrayRef = <Test4: long[] mainEdgeExeNumMatrix>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB0 -> BB1:  ");
+
+        tmpLocal = tmpArrayRef[1L];
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB1 -> BB2:  ");
+
+        tmpLocal = tmpArrayRef[6L];
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB1 -> BB1:  ");
+
+        tmpLocal = tmpArrayRef[5L];
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB2 -> BB3:  ");
+
+        tmpLocal = tmpArrayRef[11L];
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("+----------------------------------\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("| Average Number Of Variables Live\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("| At An Executed Instruction\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("+----------------------------------\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("Method: <Test4: void main(java.lang.String[])>\n");
+
+        tmpFloat = 0.0F;
+
+        tttmpLocal = 0L;
+
+        tmpLocal = <Test4: long mainBB0ExeNum>;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpLocal = <Test4: long mainBB1ExeNum>;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpLocal = <Test4: long mainBB2ExeNum>;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpLocal = <Test4: long mainBB3ExeNum>;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpFloat = tmpFloat / tttmpLocal;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(float)>(tmpFloat);
+
+        return;
+    }
+
+    public void <init>()
+    {
+        Test4 this;
+
+        this := @this: Test4;
+
+        specialinvoke this.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+}

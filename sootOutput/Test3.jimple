@@ -1,0 +1,676 @@
+public class Test3 extends java.lang.Object
+{
+    static long func1BB0ExeNum;
+    static long func1BB1ExeNum;
+    static long func1BB2ExeNum;
+    static long func1BB3ExeNum;
+    static long func1BB4ExeNum;
+    static long func1LastBlock;
+    static long[] func1EdgeExeNumMatrix;
+    static long func2BB0ExeNum;
+    static long func2BB1ExeNum;
+    static long func2BB2ExeNum;
+    static long func2BB3ExeNum;
+    static long func2BB4ExeNum;
+    static long func2LastBlock;
+    static long[] func2EdgeExeNumMatrix;
+    static long mainBB0ExeNum;
+
+    public static void main(java.lang.String[])
+    {
+        java.lang.String[] args;
+        long tmpLocal, ttmpLocal, tttmpLocal;
+        long[] tmpArrayRef;
+        float tmpFloat;
+        java.io.PrintStream tmpRef;
+
+        tmpArrayRef = newarray (long)[25];
+
+        <Test3: long[] func2EdgeExeNumMatrix> = tmpArrayRef;
+
+        tmpArrayRef = newarray (long)[25];
+
+        <Test3: long[] func1EdgeExeNumMatrix> = tmpArrayRef;
+
+        tmpLocal = <Test3: long mainBB0ExeNum>;
+
+        tmpLocal = tmpLocal + 1L;
+
+        <Test3: long mainBB0ExeNum> = tmpLocal;
+
+        args := @parameter0: java.lang.String[];
+
+        staticinvoke <Test3: void func1(int)>(100);
+
+        staticinvoke <Test3: void func2(int)>(10);
+
+        tmpRef = <java.lang.System: java.io.PrintStream out>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("+----------------------------------\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("| Basic Block Profiling\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("+----------------------------------\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("Method: <Test3: void main(java.lang.String[])>\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB0: ");
+
+        tmpLocal = <Test3: long mainBB0ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("Method: <Test3: void func1(int)>\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB0: ");
+
+        tmpLocal = <Test3: long func1BB0ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB1: ");
+
+        tmpLocal = <Test3: long func1BB1ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB2: ");
+
+        tmpLocal = <Test3: long func1BB2ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB3: ");
+
+        tmpLocal = <Test3: long func1BB3ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB4: ");
+
+        tmpLocal = <Test3: long func1BB4ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("Method: <Test3: void func2(int)>\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB0: ");
+
+        tmpLocal = <Test3: long func2BB0ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB1: ");
+
+        tmpLocal = <Test3: long func2BB1ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB2: ");
+
+        tmpLocal = <Test3: long func2BB2ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB3: ");
+
+        tmpLocal = <Test3: long func2BB3ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB4: ");
+
+        tmpLocal = <Test3: long func2BB4ExeNum>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("+----------------------------------\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("| Edge Profiling\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("+----------------------------------\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("Method: <Test3: void func1(int)>\n");
+
+        tmpArrayRef = <Test3: long[] func1EdgeExeNumMatrix>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB0 -> BB1:  ");
+
+        tmpLocal = tmpArrayRef[1L];
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB1 -> BB2:  ");
+
+        tmpLocal = tmpArrayRef[7L];
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB1 -> BB3:  ");
+
+        tmpLocal = tmpArrayRef[8L];
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB2 -> BB4:  ");
+
+        tmpLocal = tmpArrayRef[14L];
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB3 -> BB1:  ");
+
+        tmpLocal = tmpArrayRef[16L];
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("Method: <Test3: void func2(int)>\n");
+
+        tmpArrayRef = <Test3: long[] func2EdgeExeNumMatrix>;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB0 -> BB1:  ");
+
+        tmpLocal = tmpArrayRef[1L];
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB1 -> BB2:  ");
+
+        tmpLocal = tmpArrayRef[7L];
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB1 -> BB3:  ");
+
+        tmpLocal = tmpArrayRef[8L];
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB2 -> BB4:  ");
+
+        tmpLocal = tmpArrayRef[14L];
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("BB3 -> BB1:  ");
+
+        tmpLocal = tmpArrayRef[16L];
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(int)>(tmpLocal);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("+----------------------------------\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("| Average Number Of Variables Live\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("| At An Executed Instruction\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("+----------------------------------\n");
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("Method: <Test3: void main(java.lang.String[])>\n");
+
+        tmpFloat = 0.0F;
+
+        tttmpLocal = 0L;
+
+        tmpLocal = <Test3: long mainBB0ExeNum>;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpFloat = tmpFloat / tttmpLocal;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(float)>(tmpFloat);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("Method: <Test3: void func1(int)>\n");
+
+        tmpFloat = 0.0F;
+
+        tttmpLocal = 0L;
+
+        tmpLocal = <Test3: long func1BB0ExeNum>;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpLocal = <Test3: long func1BB1ExeNum>;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpLocal = <Test3: long func1BB2ExeNum>;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpLocal = <Test3: long func1BB3ExeNum>;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpLocal = <Test3: long func1BB4ExeNum>;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpFloat = tmpFloat / tttmpLocal;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(float)>(tmpFloat);
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void print(java.lang.String)>("Method: <Test3: void func2(int)>\n");
+
+        tmpFloat = 0.0F;
+
+        tttmpLocal = 0L;
+
+        tmpLocal = <Test3: long func2BB0ExeNum>;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpLocal = <Test3: long func2BB1ExeNum>;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpLocal = <Test3: long func2BB2ExeNum>;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpLocal = <Test3: long func2BB3ExeNum>;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 1L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpLocal = <Test3: long func2BB4ExeNum>;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        ttmpLocal = tmpLocal * 0L;
+
+        tmpFloat = tmpFloat + ttmpLocal;
+
+        tttmpLocal = tttmpLocal + tmpLocal;
+
+        tmpFloat = tmpFloat / tttmpLocal;
+
+        virtualinvoke tmpRef.<java.io.PrintStream: void println(float)>(tmpFloat);
+
+        return;
+    }
+
+    public static void func1(int)
+    {
+        int x, temp$1;
+        long tmpLocal, ttmpLocal;
+        long[] tmpArrayRef;
+
+        tmpLocal = <Test3: long func1BB0ExeNum>;
+
+        tmpLocal = tmpLocal + 1L;
+
+        <Test3: long func1BB0ExeNum> = tmpLocal;
+
+        <Test3: long func1LastBlock> = 0L;
+
+        x := @parameter0: int;
+
+     label1:
+        tmpLocal = <Test3: long func1BB1ExeNum>;
+
+        tmpLocal = tmpLocal + 1L;
+
+        <Test3: long func1BB1ExeNum> = tmpLocal;
+
+        tmpLocal = <Test3: long func1LastBlock>;
+
+        tmpLocal = tmpLocal * 5L;
+
+        tmpLocal = tmpLocal + 1L;
+
+        tmpArrayRef = <Test3: long[] func1EdgeExeNumMatrix>;
+
+        ttmpLocal = tmpArrayRef[tmpLocal];
+
+        ttmpLocal = ttmpLocal + 1L;
+
+        tmpArrayRef[tmpLocal] = ttmpLocal;
+
+        <Test3: long func1LastBlock> = 1L;
+
+        if x > 0 goto label2;
+
+        tmpLocal = <Test3: long func1BB2ExeNum>;
+
+        tmpLocal = tmpLocal + 1L;
+
+        <Test3: long func1BB2ExeNum> = tmpLocal;
+
+        tmpLocal = <Test3: long func1LastBlock>;
+
+        tmpLocal = tmpLocal * 5L;
+
+        tmpLocal = tmpLocal + 2L;
+
+        tmpArrayRef = <Test3: long[] func1EdgeExeNumMatrix>;
+
+        ttmpLocal = tmpArrayRef[tmpLocal];
+
+        ttmpLocal = ttmpLocal + 1L;
+
+        tmpArrayRef[tmpLocal] = ttmpLocal;
+
+        <Test3: long func1LastBlock> = 2L;
+
+        goto label3;
+
+     label2:
+        tmpLocal = <Test3: long func1BB3ExeNum>;
+
+        tmpLocal = tmpLocal + 1L;
+
+        <Test3: long func1BB3ExeNum> = tmpLocal;
+
+        temp$1 = x + -1;
+
+        x = temp$1;
+
+        tmpLocal = <Test3: long func1LastBlock>;
+
+        tmpLocal = tmpLocal * 5L;
+
+        tmpLocal = tmpLocal + 3L;
+
+        tmpArrayRef = <Test3: long[] func1EdgeExeNumMatrix>;
+
+        ttmpLocal = tmpArrayRef[tmpLocal];
+
+        ttmpLocal = ttmpLocal + 1L;
+
+        tmpArrayRef[tmpLocal] = ttmpLocal;
+
+        <Test3: long func1LastBlock> = 3L;
+
+        goto label1;
+
+     label3:
+        tmpLocal = <Test3: long func1BB4ExeNum>;
+
+        tmpLocal = tmpLocal + 1L;
+
+        <Test3: long func1BB4ExeNum> = tmpLocal;
+
+        tmpLocal = <Test3: long func1LastBlock>;
+
+        tmpLocal = tmpLocal * 5L;
+
+        tmpLocal = tmpLocal + 4L;
+
+        tmpArrayRef = <Test3: long[] func1EdgeExeNumMatrix>;
+
+        ttmpLocal = tmpArrayRef[tmpLocal];
+
+        ttmpLocal = ttmpLocal + 1L;
+
+        tmpArrayRef[tmpLocal] = ttmpLocal;
+
+        <Test3: long func1LastBlock> = 4L;
+
+        return;
+    }
+
+    public static void func2(int)
+    {
+        int x, temp$1;
+        long tmpLocal, ttmpLocal;
+        long[] tmpArrayRef;
+
+        tmpLocal = <Test3: long func2BB0ExeNum>;
+
+        tmpLocal = tmpLocal + 1L;
+
+        <Test3: long func2BB0ExeNum> = tmpLocal;
+
+        <Test3: long func2LastBlock> = 0L;
+
+        x := @parameter0: int;
+
+     label1:
+        tmpLocal = <Test3: long func2BB1ExeNum>;
+
+        tmpLocal = tmpLocal + 1L;
+
+        <Test3: long func2BB1ExeNum> = tmpLocal;
+
+        tmpLocal = <Test3: long func2LastBlock>;
+
+        tmpLocal = tmpLocal * 5L;
+
+        tmpLocal = tmpLocal + 1L;
+
+        tmpArrayRef = <Test3: long[] func2EdgeExeNumMatrix>;
+
+        ttmpLocal = tmpArrayRef[tmpLocal];
+
+        ttmpLocal = ttmpLocal + 1L;
+
+        tmpArrayRef[tmpLocal] = ttmpLocal;
+
+        <Test3: long func2LastBlock> = 1L;
+
+        if x < 100 goto label2;
+
+        tmpLocal = <Test3: long func2BB2ExeNum>;
+
+        tmpLocal = tmpLocal + 1L;
+
+        <Test3: long func2BB2ExeNum> = tmpLocal;
+
+        tmpLocal = <Test3: long func2LastBlock>;
+
+        tmpLocal = tmpLocal * 5L;
+
+        tmpLocal = tmpLocal + 2L;
+
+        tmpArrayRef = <Test3: long[] func2EdgeExeNumMatrix>;
+
+        ttmpLocal = tmpArrayRef[tmpLocal];
+
+        ttmpLocal = ttmpLocal + 1L;
+
+        tmpArrayRef[tmpLocal] = ttmpLocal;
+
+        <Test3: long func2LastBlock> = 2L;
+
+        goto label3;
+
+     label2:
+        tmpLocal = <Test3: long func2BB3ExeNum>;
+
+        tmpLocal = tmpLocal + 1L;
+
+        <Test3: long func2BB3ExeNum> = tmpLocal;
+
+        temp$1 = x + 1;
+
+        x = temp$1;
+
+        tmpLocal = <Test3: long func2LastBlock>;
+
+        tmpLocal = tmpLocal * 5L;
+
+        tmpLocal = tmpLocal + 3L;
+
+        tmpArrayRef = <Test3: long[] func2EdgeExeNumMatrix>;
+
+        ttmpLocal = tmpArrayRef[tmpLocal];
+
+        ttmpLocal = ttmpLocal + 1L;
+
+        tmpArrayRef[tmpLocal] = ttmpLocal;
+
+        <Test3: long func2LastBlock> = 3L;
+
+        goto label1;
+
+     label3:
+        tmpLocal = <Test3: long func2BB4ExeNum>;
+
+        tmpLocal = tmpLocal + 1L;
+
+        <Test3: long func2BB4ExeNum> = tmpLocal;
+
+        tmpLocal = <Test3: long func2LastBlock>;
+
+        tmpLocal = tmpLocal * 5L;
+
+        tmpLocal = tmpLocal + 4L;
+
+        tmpArrayRef = <Test3: long[] func2EdgeExeNumMatrix>;
+
+        ttmpLocal = tmpArrayRef[tmpLocal];
+
+        ttmpLocal = ttmpLocal + 1L;
+
+        tmpArrayRef[tmpLocal] = ttmpLocal;
+
+        <Test3: long func2LastBlock> = 4L;
+
+        return;
+    }
+
+    public void <init>()
+    {
+        Test3 this;
+
+        this := @this: Test3;
+
+        specialinvoke this.<java.lang.Object: void <init>()>();
+
+        return;
+    }
+}

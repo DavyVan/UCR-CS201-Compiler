@@ -1,7 +1,13 @@
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.List;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
 import soot.ArrayType;
+import soot.FloatType;
 import soot.LongType;
 import soot.Local;
 import soot.Modifier;
@@ -17,6 +23,7 @@ import soot.SootMethod;
 import soot.Transform;
 import soot.Value;
 import soot.jimple.AssignStmt;
+import soot.jimple.FloatConstant;
 import soot.jimple.IntConstant;
 import soot.jimple.LongConstant;
 import soot.jimple.Jimple;
@@ -32,9 +39,13 @@ import soot.toolkits.scalar.SimpleLiveLocals;
 
 
 public class Main {
-	private static String _className = "Test1";
+	private static String _className = "Test2";
+	private static List<UnitGraph> unitGraphs = new ArrayList<UnitGraph>();
+	private static List<BlockGraph> blockGraphs = new ArrayList<BlockGraph>();
+	private static List<List<Integer>> liveLocals = new ArrayList<List<Integer>>();
 	
 	public static void main(String[] args) {
+//		System.out.println(Arrays.toString(args));
 		
 		//Static Analysis (Retrieve Flow Graph)
 		staticAnalysis();
@@ -44,7 +55,19 @@ public class Main {
  
 		Scene.v().addBasicClass("java.io.PrintStream",SootClass.SIGNATURES);
         Scene.v().addBasicClass("java.lang.System",SootClass.SIGNATURES);
-		soot.Main.main(args);	//TODO: uncomment this
+        List<String> _args = new ArrayList<String>();
+        
+        _args.add("-allow-phantom-refs");
+//        _args.add("-output-format");
+//        _args.add("d");
+        _args.add(_className);
+//        _args.add("-cp");
+//        _args.add("/home/fanquan/Desktop/CS201Fall18_FQ/Analysis/");
+        String[] args1 = (String[]) _args.toArray(new String[_args.size()]);
+        
+//        System.out.println(Arrays.toString(args1));
+		soot.Main.main(args1);	//TODO: uncomment this
+		//-allow-phantom-refs -process-dir /home/fanquan/Desktop/CS201Fall18_FQ/Analysis/
 
 	}
 
@@ -67,8 +90,10 @@ public class Main {
 	    for (int i = 0; i < methodsNum-1; i++) {
 	    	SootMethod currentMethod = methods.get(i);
 	    	Body currentBody = currentMethod.retrieveActiveBody();
+	    	Body _copy = (Body) currentBody.clone();
 	    	
 	    	BlockGraph blockGraph = new ClassicCompleteBlockGraph(currentBody);
+	    	blockGraphs.add(new ClassicCompleteBlockGraph(_copy));
 	    	System.out.println("Method: " + currentMethod.toString());
 	    	System.out.println(blockGraph.toString());
 	    }
@@ -82,8 +107,11 @@ public class Main {
 	    for (int i = 0; i < methodsNum-1; i++) {
 	    	SootMethod currentMethod = methods.get(i);
 	    	Body currentBody = currentMethod.retrieveActiveBody();
+	    	Body _copy = (Body) currentBody.clone();
+	    	liveLocals.add(new ArrayList<Integer>());
 	    	
 	    	UnitGraph unitGraph = new ClassicCompleteUnitGraph(currentBody);
+	    	unitGraphs.add(new ClassicCompleteUnitGraph(_copy));
 	    	
 	    	// Do analysis: SimpleLiveVariable
 	    	// References: soot/RunLiveAnalysis.java, soot/SimpleLiveLocals.java
@@ -102,6 +130,7 @@ public class Main {
 	    	for (Unit u : unitGraph) {
 	    		List<Local> before = simpleLiveLocals.getLiveLocalsBefore(u);
 	    		List<Local> after = simpleLiveLocals.getLiveLocalsAfter(u);
+	    		liveLocals.get(i).add(before.size());
 	    		
 	    		String s = u.toString();
 	    		int length = maxLength - s.length();
@@ -142,10 +171,14 @@ public class Main {
 				arg0.getLocals().add(tmpLocal);
 				Local ttmpLocal = Jimple.v().newLocal("ttmpLocal", LongType.v());
 				arg0.getLocals().add(ttmpLocal);
+				Local tttmpLocal = Jimple.v().newLocal("tttmpLocal", LongType.v());
+				arg0.getLocals().add(tttmpLocal);
 				Local tmpArrayRef = Jimple.v().newLocal("tmpArrayRef", ArrayType.v(LongType.v(), 1));
 				arg0.getLocals().add(tmpArrayRef);
-				Local tmpString = Jimple.v().newLocal("tmpString", RefType.v("java.lang.String"));
-				arg0.getLocals().add(tmpString);
+				Local tmpFloat = Jimple.v().newLocal("tmpFloat", FloatType.v());
+				arg0.getLocals().add(tmpFloat);
+//				Local tmpString = Jimple.v().newLocal("tmpString", RefType.v("java.lang.String"));
+//				arg0.getLocals().add(tmpString);
 				
 				// If this is the main function
 				boolean isMainMethod = arg0.getMethod().getSubSignature().equals("void main(java.lang.String[])");
@@ -154,8 +187,9 @@ public class Main {
 				Local tmpRef = Jimple.v().newLocal("tmpRef", RefType.v("java.io.PrintStream"));
 		        arg0.getLocals().add(tmpRef);
 		        SootMethod printIntCall = Scene.v().getSootClass("java.io.PrintStream").getMethod("void println(int)");
-		        SootMethod printIntNoNewLineCall = Scene.v().getSootClass("java.io.PrintStream").getMethod("void print(int)");
+//		        SootMethod printIntNoNewLineCall = Scene.v().getSootClass("java.io.PrintStream").getMethod("void print(int)");
 		        SootMethod printStringCall = Scene.v().getSootClass("java.io.PrintStream").getMethod("void print(java.lang.String)");
+		        SootMethod printFloatCall = Scene.v().getSootClass("java.io.PrintStream").getMethod("void println(float)");
 				
 		        /**
 				 * BB Profiling
@@ -253,7 +287,7 @@ public class Main {
 
 				if (isMainMethod) {		// Something to be done in main function
 					// Allocate matrixes for every method
-					Block headBlock = blocks.get(0);	// Insert to the beginning of main
+					Block headBlock = blocks.get(0);	// Insert to theE beginning of main
 					List<SootMethod> methods = currentSootClass.getMethods();
 					for (SootMethod m : methods) {
 						int _blockNum = new ClassicCompleteBlockGraph(m.retrieveActiveBody()).getBlocks().size();
@@ -296,8 +330,58 @@ public class Main {
 							}
 						}
 						
-					}
-				}
+					}	// end of foreach m in methods
+					
+					/**
+					 * Average Number Of Variables Live At An Executed Instruction
+					 */
+					tailBlock.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("\n"))), tailUnit);
+					tailBlock.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("+----------------------------------\n"))), tailUnit);
+					tailBlock.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("| Average Number Of Variables Live\n"))), tailUnit);
+					tailBlock.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("| At An Executed Instruction\n"))), tailUnit);
+					tailBlock.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("+----------------------------------\n"))), tailUnit);
+					
+					int methodNum = methods.size();
+					for (int i = 0; i < methodNum-1; i++) {
+						SootMethod m = methods.get(i);
+						BlockGraph mBlockGraph = blockGraphs.get(i);
+						List<Block> mBlocks = mBlockGraph.getBlocks();
+						UnitGraph mUnitGraph = unitGraphs.get(i);
+						List<Integer> mLiveLocals = liveLocals.get(i);
+						
+						tailBlock.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("Method: " + m.toString() + "\n"))), tailUnit);
+						
+						// (0) tmpFloat = 0.0f;
+						tailBlock.insertBefore(Jimple.v().newAssignStmt(tmpFloat, FloatConstant.v(0.0f)), tailUnit);
+						// (0) tttmpLocal = 0;
+						tailBlock.insertBefore(Jimple.v().newAssignStmt(tttmpLocal, LongConstant.v(0)), tailUnit);
+						int j = 0;
+						for (Block mb : mBlocks) {
+							SootField mbExeNumField = currentSootClass.getFieldByName(m.getName() + "BB" + mb.getIndexInMethod() + "ExeNum");
+							// (0) tmpLocal = ExeNumField
+							tailBlock.insertBefore(Jimple.v().newAssignStmt(tmpLocal, Jimple.v().newStaticFieldRef(mbExeNumField.makeRef())), tailUnit);
+							
+							Iterator<Unit> _uIterator = mb.iterator();
+							synchronized (_uIterator) {
+								while (_uIterator.hasNext()) {
+									Unit _u = _uIterator.next();
+//									System.out.println(_u.toString());
+									// (1) ttmpLocal = tmpLocal * LongConstant(lives)
+									tailBlock.insertBefore(Jimple.v().newAssignStmt(ttmpLocal, Jimple.v().newMulExpr(tmpLocal, LongConstant.v(mLiveLocals.get(j)))), tailUnit);
+									// (2) tmpFloat = tmpFloat + ttmpLocal
+									tailBlock.insertBefore(Jimple.v().newAssignStmt(tmpFloat, Jimple.v().newAddExpr(tmpFloat, ttmpLocal)), tailUnit);
+									// (3) tttmpLocal = tttmpLocal + tmpLocal
+									tailBlock.insertBefore(Jimple.v().newAssignStmt(tttmpLocal, Jimple.v().newAddExpr(tttmpLocal, tmpLocal)), tailUnit);
+									j++;
+								}
+							}
+						}	// end of for j blocks
+						// (4) tmpFloat = tmpFloat / tttmpLocal
+						tailBlock.insertBefore(Jimple.v().newAssignStmt(tmpFloat, Jimple.v().newDivExpr(tmpFloat, tttmpLocal)), tailUnit);
+						// Print result tmpFloat
+						tailBlock.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printFloatCall.makeRef(), tmpFloat)), tailUnit);
+					}	// end of for i methods
+				}	// end of if isMainMethod
 				
 				
 //				arg0.validate();
