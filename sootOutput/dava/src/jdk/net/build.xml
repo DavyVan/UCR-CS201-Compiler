@@ -27,7 +27,7 @@
 		<arg value="SocketFlow$Status" />
 		<arg value="NetworkPermission" />
 		<arg value="ExtendedSocketOptions$ExtSocketOption" />
-		<arg value="Test2" />
+		<arg value="Test1" />
 	  </exec>
 	</target>
 </project>

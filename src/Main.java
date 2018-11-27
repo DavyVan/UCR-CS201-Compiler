@@ -39,13 +39,12 @@ import soot.toolkits.scalar.SimpleLiveLocals;
 
 
 public class Main {
-	private static String _className = "Test2";
+	private static String _className = "Test1";
 	private static List<UnitGraph> unitGraphs = new ArrayList<UnitGraph>();
 	private static List<BlockGraph> blockGraphs = new ArrayList<BlockGraph>();
 	private static List<List<Integer>> liveLocals = new ArrayList<List<Integer>>();
 	
 	public static void main(String[] args) {
-//		System.out.println(Arrays.toString(args));
 		
 		//Static Analysis (Retrieve Flow Graph)
 		staticAnalysis();
@@ -55,18 +54,13 @@ public class Main {
  
 		Scene.v().addBasicClass("java.io.PrintStream",SootClass.SIGNATURES);
         Scene.v().addBasicClass("java.lang.System",SootClass.SIGNATURES);
+        
+        // Overwrite program arguments to allow me to designate which test file should be analyzed.
         List<String> _args = new ArrayList<String>();
-        
         _args.add("-allow-phantom-refs");
-//        _args.add("-output-format");
-//        _args.add("d");
         _args.add(_className);
-//        _args.add("-cp");
-//        _args.add("/home/fanquan/Desktop/CS201Fall18_FQ/Analysis/");
         String[] args1 = (String[]) _args.toArray(new String[_args.size()]);
-        
-//        System.out.println(Arrays.toString(args1));
-		soot.Main.main(args1);	//TODO: uncomment this
+		soot.Main.main(args1);
 		//-allow-phantom-refs -process-dir /home/fanquan/Desktop/CS201Fall18_FQ/Analysis/
 
 	}
@@ -177,8 +171,6 @@ public class Main {
 				arg0.getLocals().add(tmpArrayRef);
 				Local tmpFloat = Jimple.v().newLocal("tmpFloat", FloatType.v());
 				arg0.getLocals().add(tmpFloat);
-//				Local tmpString = Jimple.v().newLocal("tmpString", RefType.v("java.lang.String"));
-//				arg0.getLocals().add(tmpString);
 				
 				// If this is the main function
 				boolean isMainMethod = arg0.getMethod().getSubSignature().equals("void main(java.lang.String[])");
@@ -187,7 +179,6 @@ public class Main {
 				Local tmpRef = Jimple.v().newLocal("tmpRef", RefType.v("java.io.PrintStream"));
 		        arg0.getLocals().add(tmpRef);
 		        SootMethod printIntCall = Scene.v().getSootClass("java.io.PrintStream").getMethod("void println(int)");
-//		        SootMethod printIntNoNewLineCall = Scene.v().getSootClass("java.io.PrintStream").getMethod("void print(int)");
 		        SootMethod printStringCall = Scene.v().getSootClass("java.io.PrintStream").getMethod("void print(java.lang.String)");
 		        SootMethod printFloatCall = Scene.v().getSootClass("java.io.PrintStream").getMethod("void println(float)");
 				
@@ -351,21 +342,20 @@ public class Main {
 						
 						tailBlock.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printStringCall.makeRef(), StringConstant.v("Method: " + m.toString() + "\n"))), tailUnit);
 						
-						// (0) tmpFloat = 0.0f;
+						// (0.1) tmpFloat = 0.0f;
 						tailBlock.insertBefore(Jimple.v().newAssignStmt(tmpFloat, FloatConstant.v(0.0f)), tailUnit);
-						// (0) tttmpLocal = 0;
+						// (0.2) tttmpLocal = 0;
 						tailBlock.insertBefore(Jimple.v().newAssignStmt(tttmpLocal, LongConstant.v(0)), tailUnit);
 						int j = 0;
 						for (Block mb : mBlocks) {
 							SootField mbExeNumField = currentSootClass.getFieldByName(m.getName() + "BB" + mb.getIndexInMethod() + "ExeNum");
-							// (0) tmpLocal = ExeNumField
+							// (0.3) tmpLocal = ExeNumField
 							tailBlock.insertBefore(Jimple.v().newAssignStmt(tmpLocal, Jimple.v().newStaticFieldRef(mbExeNumField.makeRef())), tailUnit);
 							
 							Iterator<Unit> _uIterator = mb.iterator();
 							synchronized (_uIterator) {
 								while (_uIterator.hasNext()) {
 									Unit _u = _uIterator.next();
-//									System.out.println(_u.toString());
 									// (1) ttmpLocal = tmpLocal * LongConstant(lives)
 									tailBlock.insertBefore(Jimple.v().newAssignStmt(ttmpLocal, Jimple.v().newMulExpr(tmpLocal, LongConstant.v(mLiveLocals.get(j)))), tailUnit);
 									// (2) tmpFloat = tmpFloat + ttmpLocal
@@ -378,14 +368,11 @@ public class Main {
 						}	// end of for j blocks
 						// (4) tmpFloat = tmpFloat / tttmpLocal
 						tailBlock.insertBefore(Jimple.v().newAssignStmt(tmpFloat, Jimple.v().newDivExpr(tmpFloat, tttmpLocal)), tailUnit);
-						// Print result tmpFloat
+						// (5) Print result tmpFloat
 						tailBlock.insertBefore(Jimple.v().newInvokeStmt(Jimple.v().newVirtualInvokeExpr(tmpRef, printFloatCall.makeRef(), tmpFloat)), tailUnit);
 					}	// end of for i methods
 				}	// end of if isMainMethod
-				
-				
-//				arg0.validate();
-			}
+			}	// end of profile()
 			
 			@Override
 			protected void internalTransform(Body arg0, String arg1, Map arg2) {
